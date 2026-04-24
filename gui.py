@@ -3,8 +3,8 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                              QPushButton, QLabel, QLineEdit, QTableWidget, 
                              QTableWidgetItem, QHeaderView, QMessageBox, QDialog,
                              QApplication, QAbstractItemView, QProgressBar, QCheckBox, QFileDialog)
-from PyQt6.QtCore import Qt, QTimer, QSize # <-- AÑADIDO QSize
-from PyQt6.QtGui import QIcon, QFont, QAction # <-- AÑADIDO QAction si no estaba
+from PyQt6.QtCore import Qt, QTimer, QSize 
+from PyQt6.QtGui import QIcon, QFont, QAction 
 
 import security
 import database
@@ -53,11 +53,34 @@ class LoginDialog(QDialog):
             lbl.setStyleSheet("color: #94a3b8;")
             layout.addWidget(lbl)
             
+            # --- INICIO DEL CÓDIGO MODIFICADO PARA PONER BOTÓN DE OJO QUE MUESTRA LA CONTRASEÑA ---
+            
+            # 1. Creamos un layout horizontal para el campo y el botón
+            pwd_layout = QHBoxLayout() 
+            
             self.pwd_input = QLineEdit()
             self.pwd_input.setPlaceholderText("Contraseña Maestra")
             self.pwd_input.setEchoMode(QLineEdit.EchoMode.Password)
             self.pwd_input.returnPressed.connect(self.handle_login)
-            layout.addWidget(self.pwd_input)
+            
+            # 2. Agregamos el QLineEdit al nuevo layout horizontal
+            pwd_layout.addWidget(self.pwd_input) 
+            
+            # 3. Creamos y configuramos el botón del ojo
+            btn_view = QPushButton("👁")
+            btn_view.setFixedWidth(40)
+            
+            # Nota: Usamos self.pwd_input que es la variable de esta ventana
+            btn_view.pressed.connect(lambda: self.pwd_input.setEchoMode(QLineEdit.EchoMode.Normal))
+            btn_view.released.connect(lambda: self.pwd_input.setEchoMode(QLineEdit.EchoMode.Password))
+            
+            # 4. Agregamos el botón al layout horizontal
+            pwd_layout.addWidget(btn_view) 
+            
+            # 5. Finalmente, agregamos el layout horizontal completo al layout vertical principal
+            layout.addLayout(pwd_layout) 
+            
+            # --- FIN DEL CÓDIGO MODIFICADO PARA MOSTRAR LA CONTRASEÑA CUANDO SE REQUIERA ---
             
             btn = QPushButton("Desbloquear")
             btn.clicked.connect(self.handle_login)
