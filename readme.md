@@ -46,6 +46,7 @@ python -m venv venv
 Bash
 pip install -r requirements.txt
 pip install pyinstaller
+pip install --upgrade pyinstaller pyqt6
 3. Comando de Compilación
 Bash
 pyinstaller --noconsole --onefile --name "MasteRkey" --icon="candado.ico" --hidden-import "pkgutil" --clean main.py
